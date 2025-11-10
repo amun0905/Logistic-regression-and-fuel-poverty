@@ -57,8 +57,8 @@ This R script explores fuel poverty in England using socio-economic data from th
 
 | Model        | Accuracy | Sensitivity | Specificity | AUC  |
 |--------------|----------|-------------|-------------|------|
-| Initial (`mylog1`) | 0.85     | 0.04        | 0.99        | 0.52 |
-| Balanced (`mylog2`)| 0.70     | 0.60        | 0.71        | 0.67 |
+| Initial (mylog1) | 0.85     | 0.04        | 0.99        | 0.52 |
+| Balanced (mylog2)| 0.70     | 0.60        | 0.71        | 0.67 |
 
 - Interpretation:
   - Vulnerable households, renters, ethnic minorities, and unemployed heads of household are more likely to be fuel poor.
