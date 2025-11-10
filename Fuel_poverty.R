@@ -1,21 +1,9 @@
-#Tutorial 3 - Fuel Poverty Data and Logistic Regression
-#Socio-econ variables
+fp<-read.csv("FuelPoverty_2019.csv",header = TRUE,sep=",",fileEncoding="UTF-8-BOM")
 
-#Aim of this Tutorial
-#1. Explore the Fuel Poverty Dataset, part of the English Housing Survey.
-#2. Fit a logistic regression model that predicts whether a household is in fuel poverty or not
-#using socio-economic data. Assess the fit of the model.
-
-#The data:
-
-#Downloaded from the UK Data Service - 'English Housing Survey: Fuel Poverty Dataset, 2019'
-#This database is constructed from fieldwork carried out between April 2018 and March 2020.
-fp<-read.csv("C:/Users/ucbqdma/OneDrive - University College London/Documents/ESDA/ESDA Module 24-25/Tutorials/Tutorial 3/FuelPoverty_2019.csv",header = TRUE,sep=",",fileEncoding="UTF-8-BOM")
 #Logistic regression is a method for fitting a regression curve, y = f(x), when y is a categorical variable. 
 #The typical use of this model is predicting y given a set of predictors x. 
 #The predictors can be continuous, categorical or a mix of both.
 View(fp)
-#our variable names are terrible, lets change them to meaningful names
 library(dplyr) 
 library(ggplot2)
 library(caTools)
@@ -104,11 +92,11 @@ sample = sample.split(fp_log$In_fuel_Poverty, SplitRatio = .70)#a caTools functi
 train = subset(fp_log, sample == TRUE)
 test  = subset(fp_log, sample == FALSE)
 str(train)
-mylog1<- glm(In_fuel_Poverty ~  fpvuln+ Region+ Tenure+ hhcompx+ Head_Working_Status+ Head_Ethnic_Origin, data = train, family = "binomial") #for more, see: https://www.statmethods.net/advstats/glm.html
+mylog1<- glm(In_fuel_Poverty ~  fpvuln+ Region+ Tenure+ hhcompx+ Head_Working_Status+ Head_Ethnic_Origin, data = train, family = "binomial") 
 summary(mylog1)
 library(blorr) #load it to be able to use a Mc Fadden R2: a pseudo-R2 using maximum likelihood
 #other R2 measures use OLS
-#Remember that a McFadden's R2 indicates a very good fit when it ranges 0.2-0.4 and best used
+#McFadden's R2 indicates a very good fit when it ranges 0.2-0.4 and best used
 #to compare fit among different models
 
 blr_rsq_mcfadden(mylog1)#apparently a quite poor model
@@ -152,7 +140,7 @@ train_balanced_over <- ovun.sample(In_fuel_Poverty ~ ., data = train, method = "
 table(train_balanced_over$In_fuel_Poverty)#minority class sample now increased to 6160, totalling 13000 sample size
 
 #lets re run the model on more balanced data:
-mylog2<- glm(In_fuel_Poverty ~  fpvuln+ Region+ Tenure+ hhcompx+ Head_Working_Status+ Head_Ethnic_Origin, data = train_balanced_over, family = "binomial") #for more, see: https://www.statmethods.net/advstats/glm.html
+mylog2<- glm(In_fuel_Poverty ~  fpvuln+ Region+ Tenure+ hhcompx+ Head_Working_Status+ Head_Ethnic_Origin, data = train_balanced_over, family = "binomial") 
 summary(mylog2)#how do we interpret these results?
 
 #Lets interpret a few significant variables:
@@ -178,7 +166,7 @@ summary(mylog2)#how do we interpret these results?
 #fuel poor compared to houses where the head is white
 blr_rsq_mcfadden(mylog2)#apparently a poor model
 
-#now we need to predict the test set results
+#predict the test set results
 pred_logistic<-predict(mylog2, type='response', newdata=test)#set type 'response' for probabilities
 pred_logistic #produces probabilities! we need to choose a threshold.
 y_pred_logistic<-ifelse(pred_logistic>0.5,1,0)
@@ -188,5 +176,6 @@ confusionMatrix(as.factor(y_pred_logistic),test[,1],positive = "1")
 #ROC Curve using pROC package
 test_roc_log = roc(test$In_fuel_Poverty ~ y_pred_logistic, plot = TRUE, print.auc = TRUE)#AUC:0.67 
 #still poor, but better than with mylog1 model
+
 
 
