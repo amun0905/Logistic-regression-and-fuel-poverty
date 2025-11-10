@@ -40,12 +40,12 @@ This R script explores fuel poverty in England using socio-economic data from th
   - Household composition
 
 ### 3. Modeling
-- Fit logistic regression (`glm`) to predict `In_fuel_Poverty`.
+- Fit logistic regression (glm) to predict `In_fuel_Poverty`.
 - Evaluate model using:
-  - McFadden's pseudo R² (`blorr`)
-  - Confusion matrix (`caret`)
-  - ROC curve and AUC (`pROC`)
-  - Precision, Recall, F1-score (`ROSE`)
+  - McFadden's pseudo R² (blorr)
+  - Confusion matrix (caret)
+  - ROC curve and AUC (pROC)
+  - Precision, Recall, F1-score (ROSE)
 
 ### 4. Class Imbalance Handling
 - Use random oversampling to balance minority class (fuel poor households).
